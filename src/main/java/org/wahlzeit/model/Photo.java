@@ -123,6 +123,11 @@ public class Photo extends DataObject {
 	protected String ending = "jpg";
 	
 	/**
+	 * The location of the photo. Default value is null;
+	 */
+	protected Location location;
+	
+	/**
 	 *
 	 */
 	//TODO: change it to a single long
@@ -417,5 +422,21 @@ public class Photo extends DataObject {
 	public void setNoNewPraise() {
 		noVotesAtLastNotification = noVotes;
 		incWriteCount();
+	}
+	
+	/**
+	 * @methodtype get
+	 * @return Location
+	 */
+	public Location getLocation() {
+		return location;
+	}
+	
+	/**
+	 * @methodtype set
+	 * @param location
+	 */
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 }
