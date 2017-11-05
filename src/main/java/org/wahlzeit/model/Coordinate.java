@@ -26,6 +26,8 @@ import java.text.DecimalFormatSymbols;
  *
  */
 public class Coordinate {
+	
+	public static final double EPSILON = 0.000001;
 
 	private double x;
 	private double y;
@@ -57,7 +59,9 @@ public class Coordinate {
 	 */
 	public boolean isEqual(Coordinate coordinate) {
 		
-		return 	this.hashCode() == coordinate.hashCode();
+		return Math.abs(this.x - coordinate.x) <= EPSILON 
+				&& Math.abs(this.y - coordinate.y) <= EPSILON 
+				&& Math.abs(this.z - coordinate.z) <= EPSILON;
 	}
 	
 	/**
