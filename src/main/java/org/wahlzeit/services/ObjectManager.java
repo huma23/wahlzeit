@@ -20,12 +20,14 @@
 
 package org.wahlzeit.services;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
+
+import org.wahlzeit.model.User;
+
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 /**
  * An ObjectManager creates/reads/updates/deletes Persistent (objects) from Google Datastore.
@@ -98,9 +100,14 @@ public abstract class ObjectManager {
 		assertIsNonNullArgument(result, "result");
 		assertIsNonNullArgument(type, "type");
 
+		if(type.equals(User.class))
+			log.config(LogBuilder.createSystemMessage().addParameter("Datastore: =========== LOAD USER ========", type.getName()).toString());
+		
 		log.config(LogBuilder.createSystemMessage().
 				addParameter("Datastore: load all entities of type", type.getName()).toString());
 		List<E> objects = OfyService.ofy().load().type(type).ancestor(applicationRootKey).list();
+		if(type.equals(User.class))
+			log.config(LogBuilder.createSystemMessage().addParameter("OBJECTS = " + objects.toString(), type.getName()).toString());
 		log.config(LogBuilder.createSystemMessage().
 				addParameter("Datastore: number of loaded objects", objects.size()).toString());
 		result.addAll(objects);

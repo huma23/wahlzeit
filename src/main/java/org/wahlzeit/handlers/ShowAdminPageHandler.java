@@ -20,10 +20,14 @@
 
 package org.wahlzeit.handlers;
 
+import java.util.Map;
+import java.util.logging.Logger;
+
 import org.wahlzeit.main.ServiceMain;
 import org.wahlzeit.model.AccessRights;
 import org.wahlzeit.model.Photo;
 import org.wahlzeit.model.PhotoManager;
+import org.wahlzeit.model.SneakerPhotoManager;
 import org.wahlzeit.model.User;
 import org.wahlzeit.model.UserManager;
 import org.wahlzeit.model.UserSession;
@@ -31,9 +35,6 @@ import org.wahlzeit.services.LogBuilder;
 import org.wahlzeit.utils.StringUtil;
 import org.wahlzeit.webparts.WebPart;
 import org.wahlzeit.webparts.Writable;
-
-import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * A handler class for a specific web page.
@@ -93,7 +94,7 @@ public class ShowAdminPageHandler extends AbstractWebPageHandler implements WebF
 		WebFormHandler handler = getFormHandler(PartUtil.NULL_FORM_NAME);
 
 		String photoId = us.getSavedArg("photoId").toString();
-		Photo photo = PhotoManager.getInstance().getPhoto(photoId);
+		Photo photo = SneakerPhotoManager.getInstance().getPhoto(photoId);
 		if (photo != null) {
 			handler = getFormHandler(PartUtil.ADMIN_USER_PHOTO_FORM_NAME);
 		}
@@ -146,7 +147,7 @@ public class ShowAdminPageHandler extends AbstractWebPageHandler implements WebF
 	 */
 	protected String performAdminUserPhotoRequest(UserSession us, Map args) {
 		String photoId = us.getAndSaveAsString(args, "photoId");
-		Photo photo = PhotoManager.getInstance().getPhoto(photoId);
+		Photo photo = SneakerPhotoManager.getInstance().getPhoto(photoId);
 		if (photo == null) {
 			us.setMessage(us.getClient().getLanguageConfiguration().getPhotoIsUnknown());
 		}

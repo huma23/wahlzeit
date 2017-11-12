@@ -71,6 +71,7 @@ public class User extends Client {
 	/**
 	 *
 	 */
+	
 	protected Photo userPhoto = null;
 	protected Set<Photo> photos = new HashSet<Photo>();
 	@Ignore // only used as temporary variable

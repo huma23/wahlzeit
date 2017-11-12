@@ -43,12 +43,12 @@ import java.util.logging.Logger;
 /**
  * A photo manager provides access to and manages photos.
  */
-public class PhotoManager extends ObjectManager {
+public abstract class PhotoManager extends ObjectManager {
 
 	/**
 	 *
 	 */
-	protected static final PhotoManager instance = new PhotoManager();
+	//protected static PhotoManager instance;
 
 	private static final Logger log = Logger.getLogger(PhotoManager.class.getName());
 
@@ -65,16 +65,16 @@ public class PhotoManager extends ObjectManager {
 	/**
 	 *
 	 */
-	public PhotoManager() {
-		photoTagCollector = PhotoFactory.getInstance().createPhotoTagCollector();
-	}
+	//public PhotoManager() {
+	//	photoTagCollector = PhotoFactory.getInstance().createPhotoTagCollector();
+	//}
 
 	/**
 	 *
 	 */
-	public static final PhotoManager getInstance() {
-		return instance;
-	}
+	//public static final PhotoManager getInstance() {
+	//	return instance;
+	//}
 
 	/**
 	 *
@@ -93,29 +93,12 @@ public class PhotoManager extends ObjectManager {
 	/**
 	 *
 	 */
-	public final Photo getPhoto(PhotoId id) {
-		return instance.getPhotoFromId(id);
-	}
+	public abstract Photo getPhoto(PhotoId id);
 
 	/**
 	 *
 	 */
-	public Photo getPhotoFromId(PhotoId id) {
-		if (id == null) {
-			return null;
-		}
-
-		Photo result = doGetPhotoFromId(id);
-
-		if (result == null) {
-			result = PhotoFactory.getInstance().loadPhoto(id);
-			if (result != null) {
-				doAddPhoto(result);
-			}
-		}
-
-		return result;
-	}
+	public abstract Photo getPhotoFromId(PhotoId id);
 
 	/**
 	 * @methodtype get
@@ -152,30 +135,7 @@ public class PhotoManager extends ObjectManager {
 	 *
 	 * Load all persisted photos. Executed when Wahlzeit is restarted.
 	 */
-	public void loadPhotos() {
-		Collection<Photo> existingPhotos = ObjectifyService.run(new Work<Collection<Photo>>() {
-			@Override
-			public Collection<Photo> run() {
-				Collection<Photo> existingPhotos = new ArrayList<Photo>();
-				readObjects(existingPhotos, Photo.class);
-				return existingPhotos;
-			}
-		});
-
-		for (Photo photo : existingPhotos) {
-			if (!doHasPhoto(photo.getId())) {
-				log.config(LogBuilder.createSystemMessage().
-						addParameter("Load Photo with ID", photo.getIdAsString()).toString());
-				loadScaledImages(photo);
-				doAddPhoto(photo);
-			} else {
-				log.config(LogBuilder.createSystemMessage().
-						addParameter("Already loaded Photo", photo.getIdAsString()).toString());
-			}
-		}
-
-		log.info(LogBuilder.createSystemMessage().addMessage("All photos loaded.").toString());
-	}
+	public abstract void loadPhotos();
 
 	/**
 	 * @methodtype boolean-query

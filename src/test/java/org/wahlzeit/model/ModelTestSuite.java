@@ -40,7 +40,7 @@ import org.wahlzeit.model.persistence.PersistenceTestSuite;
 	TagsTest.class,
 	UserStatusTest.class,
 	ValueTest.class,
-	PersistenceTestSuite.class
+	SneakerPhotoFactoryTest.class
 })
 
 public class ModelTestSuite {
