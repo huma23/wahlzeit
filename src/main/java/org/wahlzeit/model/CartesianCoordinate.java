@@ -25,15 +25,15 @@ import java.text.DecimalFormatSymbols;
  * A coordinate represents one cartesian coordinate
  *
  */
-public class Coordinate {
+public class CartesianCoordinate implements Coordinate{
 	
-	public static final double EPSILON = 0.000001;
+	public static final double EPSILON = 0.00001;
 
 	private double x;
 	private double y;
 	private double z;
 	
-	public Coordinate(double x, double y, double z) {
+	public CartesianCoordinate(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -44,12 +44,10 @@ public class Coordinate {
 	 * @param coord
 	 * @return (double) distance
 	 */
-	public double getDistance(Coordinate coord) {
+	@Override
+	public double getDistance(Coordinate coordinate) throws IllegalArgumentException{
 		
-		double squarresSum = Math.pow(coord.x - x, 2) + Math.pow(coord.y - y, 2) + Math.pow(coord.z - z, 2); 
-		double distance = Math.sqrt(squarresSum);
-		
-		return distance;
+		return getCartesianDistance(coordinate);
 	}
 	
 	/**
@@ -57,11 +55,16 @@ public class Coordinate {
 	 * @param coordinate
 	 * @return
 	 */
+	@Override
 	public boolean isEqual(Coordinate coordinate) {
 		
-		return Math.abs(this.x - coordinate.x) <= EPSILON 
-				&& Math.abs(this.y - coordinate.y) <= EPSILON 
-				&& Math.abs(this.z - coordinate.z) <= EPSILON;
+		if(coordinate == null) {
+			return false;
+		}
+		
+		return Math.abs(this.x - coordinate.asCartesianCoordinate().x) <= EPSILON 
+				&& Math.abs(this.y - coordinate.asCartesianCoordinate().y) <= EPSILON 
+				&& Math.abs(this.z - coordinate.asCartesianCoordinate().z) <= EPSILON;
 	}
 	
 	/**
@@ -112,6 +115,38 @@ public class Coordinate {
 		stringBuilder.append(format.format(z));
 		stringBuilder.append(")");
 		return stringBuilder.toString();
+	}
+
+	@Override
+	public CartesianCoordinate asCartesianCoordinate() {
+		
+		return this;
+	}
+
+	@Override
+	public double getCartesianDistance(Coordinate coordinate) {
+		
+		CartesianCoordinate cartesianCoordinate = coordinate.asCartesianCoordinate();
+		double squarresSum = Math.pow(cartesianCoordinate.x - this.x, 2) + Math.pow(cartesianCoordinate.y - this.y, 2) + Math.pow(cartesianCoordinate.z - this.z, 2); 
+		double distance = Math.sqrt(squarresSum);
+		
+		return distance;
+	}
+
+	@Override
+	public SphericCoordinate asSphericCoordinate() {
+		
+		double radius = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
+		double latitude = Math.toDegrees(Math.atan(this.y / this.x));
+		double longitude = Math.toDegrees(Math.atan(Math.sqrt((Math.pow(this.x, 2)) + Math.pow(this.y, 2)) / this.z));
+		
+		return new SphericCoordinate(latitude, longitude, radius);
+	}
+
+	@Override
+	public double getSphericDistance(Coordinate coordinate) throws IllegalArgumentException{
+		
+		return asSphericCoordinate().getSphericDistance(coordinate);
 	}
 	
 	

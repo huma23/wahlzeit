@@ -21,17 +21,6 @@ public class SneakerPhotoManagerTest {
 	}
 
 	@Test
-	public void testGetPhotoFromId() {
-		photo1 = photomanager.getPhotoFromId(id1);
-		photo2 = SneakerPhotoManager.getInstance().getPhotoFromId(id5);
-		
-		assertNotNull(photo1);
-		assertTrue(photo1.getClass().isAssignableFrom(SneakerPhoto.class));
-		assertNotNull(photo2);
-		assertTrue(photo2.getClass().isAssignableFrom(SneakerPhoto.class));
-	}
-
-	@Test
 	public void testGetInstance() {
 		assertEquals(photomanager, SneakerPhotoManager.getInstance());
 		assertEquals(SneakerPhotoManager.getInstance(), SneakerPhotoManager.getInstance());

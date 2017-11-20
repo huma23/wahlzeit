@@ -1,6 +1,5 @@
-/*
- * author: huma23, github.com/huma23/
- *
+/* Author: huma23, github.com/huma23
+ * 
  * This file is part of the Wahlzeit photo rating application.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,31 +18,17 @@
  */
 package org.wahlzeit.model;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.wahlzeit.model.persistence.PersistenceTestSuite;
+public interface Coordinate {
 
-/**
- * A test suite for all test in the package org.wahlzeit.model
- * 
- * author: huma23
- */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-	AccessRightsTest.class,
-	CartesianCoordinateTest.class,
-	SphericCoordinateTest.class,
-	FlagReasonTest.class,
-	GenderTest.class,
-	GuestTest.class,
-	LocationTest.class,
-	PhotoFilterTest.class,
-	TagsTest.class,
-	UserStatusTest.class,
-	ValueTest.class,
-	SneakerPhotoFactoryTest.class,
-	SneakerPhotoManagerTest.class
-})
-
-public class ModelTestSuite {
+	public CartesianCoordinate asCartesianCoordinate();
+	
+	public double getCartesianDistance(Coordinate coordinate);
+	
+	public SphericCoordinate asSphericCoordinate();
+	
+	public double getSphericDistance(Coordinate coordinate);
+	
+	public double getDistance(Coordinate coordinate);
+	
+	public boolean isEqual(Coordinate coordinate);
 }
