@@ -17,12 +17,13 @@
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package org.wahlzeit.model;
+package org.wahlzeit.model.coordinate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,7 +70,14 @@ public class CartesianCoordinateTest {
 		assertFalse(c3.isEqual(c1));
 		assertFalse(c2.asSphericCoordinate().isEqual(c0));
 		assertFalse(c3.isEqual(c1.asSphericCoordinate()));
-		assertFalse(c0.isEqual(null));
+		
+		try {
+			c0.isEqual(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 	
 
@@ -97,6 +105,14 @@ public class CartesianCoordinateTest {
 		assertEquals(4.0570925, c0.getDistance(c1), 0.0000001);
 		assertEquals(11.8814982, c1.getDistance(c2), 0.0000001);
 		assertEquals(14.4792955, c2.getDistance(c3), 0.0000001);
+		
+		try {
+			c0.getDistance(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 	
 	/**
@@ -128,6 +144,14 @@ public class CartesianCoordinateTest {
 		assertEquals(4.0570925, c0.getCartesianDistance(c1), 0.0000001);
 		assertEquals(11.8814982, c1.getCartesianDistance(c2), 0.0000001);
 		assertEquals(14.4792955, c2.getCartesianDistance(c3), 0.0000001);
+		
+		try {
+			c1.getCartesianDistance(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 	
 	/**
@@ -137,6 +161,14 @@ public class CartesianCoordinateTest {
 	public void testGetSphericDistance() {
 		assertEquals(167.05915, c4.getSphericDistance(c6), 0.0001);
 		assertEquals(167.05915, c5.getSphericDistance(c6), 0.0001);
+		
+		try {
+			c4.getSphericDistance(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 	
 	/**

@@ -25,6 +25,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.wahlzeit.model.coordinate.CartesianCoordinate;
+import org.wahlzeit.model.coordinate.Coordinate;
+import org.wahlzeit.model.coordinate.SphericCoordinate;
 
 /**
  * Test case for the Location class

@@ -17,14 +17,18 @@
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package org.wahlzeit.model;
+package org.wahlzeit.model.coordinate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.wahlzeit.model.coordinate.CartesianCoordinate;
+import org.wahlzeit.model.coordinate.Coordinate;
+import org.wahlzeit.model.coordinate.SphericCoordinate;
 /**
  * Test case for the SphericCoordinate class
  * @author huma23
@@ -48,7 +52,10 @@ public class SphericCoordinateTest {
 		c4 = new SphericCoordinate(49.59099, 11.00783);
 		c5 = new CartesianCoordinate(789.4491653, 927.3041463, 6260.651806);
 	}
-
+	
+	/**
+	 * Test for convertion to a cartesian coordinate
+	 */
 	@Test
 	public void testAsCartesianCoordinate() {
 		assertEquals(c1, c0.asCartesianCoordinate());
@@ -57,12 +64,26 @@ public class SphericCoordinateTest {
 		assertEquals(c1, c1.asSphericCoordinate().asCartesianCoordinate());
 	}
 
+	/**
+	 * Test for getting the direct distance
+	 */
 	@Test
 	public void testGetCartesianDistance() {
 		assertEquals(229.8174, c0.getCartesianDistance(c2), 0.0001);
 		assertEquals(70.68268, c2.getCartesianDistance(c4), 0.0001);
+		
+		try {
+			c2.getCartesianDistance(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 
+	/**
+	 * Test for convertion to a spheric coordinate
+	 */
 	@Test
 	public void testAsSphericCoordinate() {
 		assertEquals(c0, c0.asSphericCoordinate());
@@ -71,21 +92,47 @@ public class SphericCoordinateTest {
 		assertEquals(c4, c5.asSphericCoordinate());
 	}
 
+	/**
+	 * Test for getting the spheric distance
+	 */
 	@Test
 	public void testGetSphericDistance() {
 		assertEquals(167.05915, c4.getSphericDistance(c2), 0.0001);
 		assertEquals(167.05915, c5.getSphericDistance(c3), 0.0001);
 		assertEquals(505.40613, c1.getSphericDistance(c3), 0.0001);
 		assertEquals(367.21814, c4.getSphericDistance(c0), 0.0001);
+		
+		try {
+			c4.getSphericDistance(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 
+	/**
+	 * Test distance between two coordinates, with a delta of 0.0001.
+	 */
 	@Test
 	public void testGetDistance() {
-		assertEquals(229.8174, c0.getCartesianDistance(c3), 0.0001);
-		assertEquals(70.68268, c2.getCartesianDistance(c4), 0.0001);
-		assertEquals(0, c4.getCartesianDistance(c5), 0.0001);
+		assertEquals(229.8174, c0.getDistance(c3), 0.0001);
+		assertEquals(70.68268, c2.getDistance(c4), 0.0001);
+		assertEquals(0, c4.getDistance(c5), 0.0001);
+		
+		try {
+			c0.getDistance(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 
+	/**
+	 * Some random comparisons between the given coordinates
+	 * for the Coordinate#isEqual(Coordinate) method
+	 */
 	@Test
 	public void testIsEqual() {
 		assertTrue(c0.isEqual(c0));
@@ -96,9 +143,20 @@ public class SphericCoordinateTest {
 		assertFalse(c3.isEqual(c1));
 		assertFalse(c2.asSphericCoordinate().isEqual(c0));
 		assertFalse(c3.isEqual(c1.asSphericCoordinate()));
-		assertFalse(c0.isEqual(null));
+		
+		try {
+			c0.isEqual(null);
+			fail("Expected IllegalargumentException");
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+			assertEquals("Coordinate can not be null!", e.getMessage());
+		}
 	}
 
+	/**
+	 * Some random comparisons between the given coordinates
+	 * for the Coordinate#equals(Coordinate) method
+	 */
 	@Test
 	public void testEquals() {
 		assertTrue(c3.equals(c3));
@@ -108,6 +166,9 @@ public class SphericCoordinateTest {
 		assertFalse(c0.equals(null));
 	}
 
+	/**
+	 * Test the string output
+	 */
 	@Test
 	public void testToString() {
 		assertEquals("(latitude / longitude / radius): (49,59 / 11,01 / 6378,00)", c4.toString());
