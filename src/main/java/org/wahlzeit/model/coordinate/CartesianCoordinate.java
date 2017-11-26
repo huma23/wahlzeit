@@ -16,38 +16,30 @@
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package org.wahlzeit.model;
+package org.wahlzeit.model.coordinate;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 /**
- * A coordinate represents one cartesian coordinate
- *
+ * A CartesianCoordinate represents one coordinate in a cartesian space
  */
-public class CartesianCoordinate implements Coordinate{
-	
-	public static final double EPSILON = 0.00001;
+public class CartesianCoordinate extends AbstractCoordinate{
 
 	private double x;
 	private double y;
 	private double z;
 	
+	/**
+	 * Constructor for creating an instance of a CartesianCoordinate
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public CartesianCoordinate(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-	}
-	
-	/**
-	 * Calculates the distance between the current and given Coordinate cord
-	 * @param coord
-	 * @return (double) distance
-	 */
-	@Override
-	public double getDistance(Coordinate coordinate) throws IllegalArgumentException{
-		
-		return getCartesianDistance(coordinate);
 	}
 	
 	/**
@@ -58,9 +50,7 @@ public class CartesianCoordinate implements Coordinate{
 	@Override
 	public boolean isEqual(Coordinate coordinate) {
 		
-		if(coordinate == null) {
-			return false;
-		}
+		assertCoordinateIsNotNull(coordinate);
 		
 		return Math.abs(this.x - coordinate.asCartesianCoordinate().x) <= EPSILON 
 				&& Math.abs(this.y - coordinate.asCartesianCoordinate().y) <= EPSILON 
@@ -82,16 +72,6 @@ public class CartesianCoordinate implements Coordinate{
 		temp = Double.doubleToLongBits(z);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		
-		if (obj instanceof Coordinate) {
-			return isEqual((Coordinate) obj);
-		}
-			
-		return false;
 	}
 	
 	/**
@@ -117,22 +97,17 @@ public class CartesianCoordinate implements Coordinate{
 		return stringBuilder.toString();
 	}
 
+	/**
+	 * Returns the current object, because it is already an instance of a CartesianCoordinate
+	 */
 	@Override
-	public CartesianCoordinate asCartesianCoordinate() {
-		
+	public CartesianCoordinate asCartesianCoordinate() {	
 		return this;
 	}
 
-	@Override
-	public double getCartesianDistance(Coordinate coordinate) {
-		
-		CartesianCoordinate cartesianCoordinate = coordinate.asCartesianCoordinate();
-		double squarresSum = Math.pow(cartesianCoordinate.x - this.x, 2) + Math.pow(cartesianCoordinate.y - this.y, 2) + Math.pow(cartesianCoordinate.z - this.z, 2); 
-		double distance = Math.sqrt(squarresSum);
-		
-		return distance;
-	}
-
+	/**
+	 * Converts this CartesianCoordinate to a SquericCoordinate.
+	 */
 	@Override
 	public SphericCoordinate asSphericCoordinate() {
 		
@@ -143,11 +118,18 @@ public class CartesianCoordinate implements Coordinate{
 		return new SphericCoordinate(latitude, longitude, radius);
 	}
 
-	@Override
-	public double getSphericDistance(Coordinate coordinate) throws IllegalArgumentException{
-		
-		return asSphericCoordinate().getSphericDistance(coordinate);
+	/*
+	 * Getters for this class 
+	 */
+	public double getX() {
+		return x;
 	}
-	
-	
+
+	public double getY() {
+		return y;
+	}
+
+	public double getZ() {
+		return z;
+	}
 }

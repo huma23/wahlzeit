@@ -18,6 +18,8 @@
  */
 package org.wahlzeit.model;
 
+import org.wahlzeit.model.coordinate.Coordinate;
+
 /**
  * The class Location represents the location of a photo.
  *

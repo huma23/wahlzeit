@@ -16,7 +16,7 @@
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package org.wahlzeit.model;
+package org.wahlzeit.model.coordinate;
 
 public interface Coordinate {
 
