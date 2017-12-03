@@ -42,6 +42,9 @@ public class SphericCoordinateTest {
 	protected Coordinate c3; // Cartesian: Same as c2 (854.071104, 953.1297086, 6248.278988)
 	protected Coordinate c4; // Spherical (Latitude : 49.59099, Longitude: 11.00783)
 	protected Coordinate c5; // Cartesian: Same as c4 (789.4491653, 927.3041463, 6260.651806)
+	protected Coordinate illegalStateCoordinate0; //radius < 0
+	protected Coordinate illegalStateCoordinate1; //latitude < -90
+	protected Coordinate illegalStateCoordinate2; //longitude > 180
 	
 	@Before
 	public void setup() {
@@ -51,6 +54,9 @@ public class SphericCoordinateTest {
 		c3 = new CartesianCoordinate(854.071104, 953.1297086, 6248.278988);
 		c4 = new SphericCoordinate(49.59099, 11.00783);
 		c5 = new CartesianCoordinate(789.4491653, 927.3041463, 6260.651806);
+		illegalStateCoordinate0 = new SphericCoordinate(10.0, 45.0, -10.0);
+		illegalStateCoordinate1 = new SphericCoordinate(-100.0, 45.0);
+		illegalStateCoordinate2 = new SphericCoordinate(45.0, 200.0);
 	}
 	
 	/**
@@ -62,6 +68,14 @@ public class SphericCoordinateTest {
 		assertEquals(c3, c2.asCartesianCoordinate());
 		assertEquals(c5, c4.asCartesianCoordinate());
 		assertEquals(c1, c1.asSphericCoordinate().asCartesianCoordinate());
+		
+		try {
+			illegalStateCoordinate0.asCartesianCoordinate();
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalStateException);
+			assertTrue(e.getMessage().endsWith("must be positive or zero!"));
+		}
 	}
 
 	/**
@@ -79,6 +93,14 @@ public class SphericCoordinateTest {
 			assertTrue(e instanceof IllegalArgumentException);
 			assertEquals("Coordinate can not be null!", e.getMessage());
 		}
+		
+		try {
+			illegalStateCoordinate1.getCartesianDistance(c2);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalStateException);
+			assertEquals("Latitude value must be between -90 and 90!", e.getMessage());
+		}
 	}
 
 	/**
@@ -90,6 +112,14 @@ public class SphericCoordinateTest {
 		assertEquals(c0, c1.asSphericCoordinate());
 		assertEquals(c4, c4.asSphericCoordinate());
 		assertEquals(c4, c5.asSphericCoordinate());
+		
+		try {
+			illegalStateCoordinate2.asSphericCoordinate();
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalStateException);
+			assertEquals("Longitude value must be between -180 and 180!", e.getMessage());
+		}
 	}
 
 	/**
@@ -151,6 +181,14 @@ public class SphericCoordinateTest {
 			assertTrue(e instanceof IllegalArgumentException);
 			assertEquals("Coordinate can not be null!", e.getMessage());
 		}
+		
+		try {
+			illegalStateCoordinate0.isEqual(c4);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof IllegalStateException);
+			assertTrue(e.getMessage().endsWith("must be positive or zero!"));
+		}
 	}
 
 	/**
@@ -174,5 +212,4 @@ public class SphericCoordinateTest {
 		assertEquals("(latitude / longitude / radius): (49,59 / 11,01 / 6378,00)", c4.toString());
 		assertEquals("(latitude / longitude / radius): (48,14 / 11,58 / 6378,00)", c2.toString());
 	}
-
 }
