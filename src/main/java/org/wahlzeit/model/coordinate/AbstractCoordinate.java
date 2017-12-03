@@ -22,14 +22,105 @@ public abstract class AbstractCoordinate implements Coordinate {
 	
 	public static final double EPSILON = 0.00001;
 	
-	@Override
-	public abstract CartesianCoordinate asCartesianCoordinate();
+	/**
+	 * Class invariant specific for each class.
+	 * Needs to be implemented
+	 * @return
+	 */
+	public abstract void assertClassInvariants();
+	
+	/**
+	 * Actual convertion to a cartesian Coordinate needs to be
+	 * implemented in the subclass
+	 * @return
+	 */
+	protected abstract CartesianCoordinate doAsCartesianCoordinate();
+	
+	/**
+	 * Actual convertion to a spheric Coordinate needs to be implemented
+	 * in the subclass
+	 * @return
+	 */
+	protected abstract SphericCoordinate doAsSphericCoordinate();
+	
+	/**
+	 * Implementation of the IsEqual check
+	 * @param coordinate
+	 * @return
+	 */
+	protected abstract boolean doIsEqual(Coordinate coordinate);
+	
+	/**
+	 * Implementation of the cartesian distance between to distances
+	 * @param coordinate
+	 * @return
+	 */
+	protected abstract double doGetCartesianDistance(Coordinate coordinate);
+	
+	/**
+	 * Implementation of the spheric distance between to distances
+	 * @param coordinate
+	 * @return
+	 */
+	protected abstract double doGetSphericDistance(Coordinate coordinate);
 	
 	@Override
-	public abstract SphericCoordinate asSphericCoordinate();
+	public CartesianCoordinate asCartesianCoordinate() {
+		
+		//Class Invariants
+		assertClassInvariants();
+								
+		//Pre Conditions - none	
+								
+		//MethodCall
+		CartesianCoordinate coordinate = doAsCartesianCoordinate();
+								
+		//Post Conditions - none
+								
+		//Class Invariants
+		assertClassInvariants();
+						
+		return coordinate;
+	}
 	
 	@Override
-	public abstract boolean isEqual(Coordinate coordinate);
+	public SphericCoordinate asSphericCoordinate() {
+		
+		//Class Invariants
+		assertClassInvariants();
+						
+		//Pre Conditions - none
+						
+		//MethodCall
+		SphericCoordinate coordinate = doAsSphericCoordinate();
+						
+		//Post Conditions - none
+						
+		//Class Invariants
+		assertClassInvariants();
+				
+		return coordinate;
+	}
+	
+	@Override
+	public boolean isEqual(Coordinate coordinate) {
+		
+		//Class Invariants
+		assertClassInvariants();
+				
+		//Pre Conditions
+		assertCoordinateIsNotNull(coordinate);
+				
+		//MethodCall
+		boolean isEqual = doIsEqual(coordinate);
+				
+		//Post Conditions - none
+				
+		//Class Invariants
+		assertClassInvariants();
+		
+		return isEqual;
+	}
 
 	/**
 	 * Calculates the cartesian distance by converting the current object and the given Coordinate
@@ -38,15 +129,20 @@ public abstract class AbstractCoordinate implements Coordinate {
 	@Override
 	public double getCartesianDistance(Coordinate coordinate) {
 
+		//Class Invariants
+		assertClassInvariants();
+		
+		//Pre Conditions
 		assertCoordinateIsNotNull(coordinate);
 		
-		CartesianCoordinate currentCoordinate = this.asCartesianCoordinate();
-		CartesianCoordinate compareCoordinate = coordinate.asCartesianCoordinate();
-
-		double squarresSum = Math.pow(compareCoordinate.getX() - currentCoordinate.getX(), 2) 
-				+ Math.pow(compareCoordinate.getY() - currentCoordinate.getY(), 2) 
-				+ Math.pow(compareCoordinate.getZ() - currentCoordinate.getZ(), 2); 
-		double distance = Math.sqrt(squarresSum);
+		//MethodCall
+		double distance = doGetCartesianDistance(coordinate);
+		
+		//Post Conditions -none
+		assertValueNotNegative("Distanz", distance);
+		
+		//Class Invariants
+		assertClassInvariants();	
 		
 		return distance;
 	}
@@ -58,20 +154,20 @@ public abstract class AbstractCoordinate implements Coordinate {
 	@Override
 	public double getSphericDistance(Coordinate coordinate) {
 		
+		//Class Invariants
+		assertClassInvariants();
+		
+		//Pre Conditions
 		assertCoordinateIsNotNull(coordinate);
 		
-		SphericCoordinate currentCoordinate = this.asSphericCoordinate();
-		SphericCoordinate compareCoordinate = coordinate.asSphericCoordinate();
+		//MethodCall
+		double distance = doGetSphericDistance(coordinate);
 		
-		double radiantPhi1 = Math.toRadians(currentCoordinate.getLatitude());
-		double radiantPhi2 = Math.toRadians(compareCoordinate.getLatitude());
-		double radiantLambda1 = Math.toRadians(currentCoordinate.getLongitude());
-		double radiantLambda2 = Math.toRadians(compareCoordinate.getLongitude());
+		//Post Conditions
+		assertValueNotNegative("Distanz", distance);
 		
-		double angle = Math.acos(Math.sin(radiantPhi1) * Math.sin(radiantPhi2) + Math.cos(radiantPhi1) * Math.cos(radiantPhi2) * Math.cos(radiantLambda1 - radiantLambda2));
-		
-		//assuming that the radius of the current is the correct
-		double distance = angle * currentCoordinate.getRadius();
+		//Class Invariants
+		assertClassInvariants();	
 		
 		return distance;
 	}
@@ -84,7 +180,6 @@ public abstract class AbstractCoordinate implements Coordinate {
 	@Override
 	public double getDistance(Coordinate coordinate) {
 		
-		assertCoordinateIsNotNull(coordinate);
 		return getCartesianDistance(coordinate);
 	}
 
@@ -110,6 +205,34 @@ public abstract class AbstractCoordinate implements Coordinate {
 	protected void assertCoordinateIsNotNull(Coordinate coordinate) {
 		if(coordinate == null) {
 			throw new IllegalArgumentException("Coordinate can not be null!");
+		}
+	}
+	
+	/**
+	 * Checks if the double is not a number or infinite.
+	 * Returns true if it is not one of them.
+	 * 
+	 * @param val
+	 * @return
+	 */
+	protected boolean assertValidDoubleValue(String name, double val) {
+		
+		if(Double.isNaN(val) || Double.isInfinite(val)) {
+			throw new IllegalStateException(name + ": Double value can not be infinite or not a number!");
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Simple implementation if value >= 0.
+	 * @param value
+	 * @return
+	 */
+	protected void assertValueNotNegative(String name, double value) {
+		
+		if(value <= 0) {
+			throw new IllegalStateException(name + "must be positive or zero!");
 		}
 	}
 }

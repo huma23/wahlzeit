@@ -48,7 +48,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	 * @return
 	 */
 	@Override
-	public boolean isEqual(Coordinate coordinate) {
+	protected boolean doIsEqual(Coordinate coordinate) {
 		
 		assertCoordinateIsNotNull(coordinate);
 		
@@ -101,7 +101,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	 * Returns the current object, because it is already an instance of a CartesianCoordinate
 	 */
 	@Override
-	public CartesianCoordinate asCartesianCoordinate() {	
+	protected CartesianCoordinate doAsCartesianCoordinate() {	
 		return this;
 	}
 
@@ -109,13 +109,41 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	 * Converts this CartesianCoordinate to a SquericCoordinate.
 	 */
 	@Override
-	public SphericCoordinate asSphericCoordinate() {
+	protected SphericCoordinate doAsSphericCoordinate() {
 		
 		double radius = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2));
 		double latitude = Math.toDegrees(Math.atan(this.y / this.x));
 		double longitude = Math.toDegrees(Math.atan(Math.sqrt((Math.pow(this.x, 2)) + Math.pow(this.y, 2)) / this.z));
 		
 		return new SphericCoordinate(latitude, longitude, radius);
+	}
+	
+	@Override
+	protected double doGetCartesianDistance(Coordinate coordinate) {
+		
+		CartesianCoordinate compareCoordinate = coordinate.asCartesianCoordinate();
+
+		double squarresSum = Math.pow(compareCoordinate.getX() - this.getX(), 2) 
+				+ Math.pow(compareCoordinate.getY() - this.getY(), 2) 
+				+ Math.pow(compareCoordinate.getZ() - this.getZ(), 2); 
+		double distance = Math.sqrt(squarresSum);
+		
+		return distance;
+	}
+	
+	@Override
+	protected double doGetSphericDistance(Coordinate coordinate) {
+		
+		return this.asSphericCoordinate().doGetSphericDistance(coordinate);
+	}
+	
+	@Override
+	public void assertClassInvariants() {
+		
+		//There are only double values in this class so they need to be checked
+		assertValidDoubleValue("X", x);
+		assertValidDoubleValue("Y", y);
+		assertValidDoubleValue("Z", z);
 	}
 
 	/*

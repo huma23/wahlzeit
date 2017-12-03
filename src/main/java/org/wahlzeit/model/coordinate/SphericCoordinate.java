@@ -60,7 +60,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * Converts this SphericCoordinate to a CartesianCoordinate.
 	 */
 	@Override
-	public CartesianCoordinate asCartesianCoordinate() {
+	protected CartesianCoordinate doAsCartesianCoordinate() {
 		
 		double radiantPhi = Math.toRadians(this.latitude);
 		double radiantLambda = Math.toRadians(this.longitude);
@@ -76,7 +76,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * Returns the current object, because it is already an instance of a SquericCoordinate
 	 */
 	@Override
-	public SphericCoordinate asSphericCoordinate() {	
+	protected SphericCoordinate doAsSphericCoordinate() {	
 		return this;
 	}
 
@@ -86,13 +86,38 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return
 	 */
 	@Override
-	public boolean isEqual(Coordinate coordinate) {
+	protected boolean doIsEqual(Coordinate coordinate) {
 		
 		assertCoordinateIsNotNull(coordinate);
 		
 		return Math.abs(this.longitude - coordinate.asSphericCoordinate().longitude) <= EPSILON 
 				&& Math.abs(this.latitude - coordinate.asSphericCoordinate().latitude) <= EPSILON 
 				&& Math.abs(this.radius - coordinate.asSphericCoordinate().radius) <= EPSILON;
+	}
+	
+	@Override
+	protected double doGetCartesianDistance(Coordinate coordinate) {
+		
+		return this.asCartesianCoordinate().doGetCartesianDistance(coordinate);
+	}
+	
+	@Override
+	protected double doGetSphericDistance(Coordinate coordinate) {
+		
+		SphericCoordinate compareCoordinate = coordinate.asSphericCoordinate();
+		
+		double radiantPhi1 = Math.toRadians(this.getLatitude());
+		double radiantPhi2 = Math.toRadians(compareCoordinate.getLatitude());
+		double radiantLambda1 = Math.toRadians(this.getLongitude());
+		double radiantLambda2 = Math.toRadians(compareCoordinate.getLongitude());
+		
+		double angle = Math.acos(Math.sin(radiantPhi1) * Math.sin(radiantPhi2) + 
+				Math.cos(radiantPhi1) * Math.cos(radiantPhi2) * Math.cos(radiantLambda1 - radiantLambda2));
+		
+		//assuming that the radius of the current is the correct
+		double distance = angle * this.getRadius();
+		
+		return distance;
 	}
 
 	/**
@@ -132,6 +157,26 @@ public class SphericCoordinate extends AbstractCoordinate {
 		stringBuilder.append(format.format(radius));
 		stringBuilder.append(")");
 		return stringBuilder.toString();
+	}
+	
+	@Override
+	public void assertClassInvariants() {
+		
+		assertValueNotNegative("Radius", radius);
+		assertValidDoubleValue("Latitude", latitude);
+		assertValidDoubleValue("Longitude", longitude);
+		assertValidLongitudeAndLatitude(longitude, latitude);
+	}
+	
+	protected void assertValidLongitudeAndLatitude(double langitude, double latitude) {
+		
+		if(latitude < -90.0 || latitude > 90.0) {
+			throw new IllegalStateException("Latitude value must be between -90 and 90!");
+		}
+		
+		if(longitude < -180.0 || longitude > 180.0) {
+			throw new IllegalStateException("Longitude value must be between -180 and 180!");
+		}
 	}
 
 	/*
