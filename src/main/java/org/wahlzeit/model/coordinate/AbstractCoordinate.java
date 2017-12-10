@@ -18,6 +18,8 @@
  */
 package org.wahlzeit.model.coordinate;
 
+import org.wahlzeit.utils.AssertionMethods;
+
 public abstract class AbstractCoordinate implements Coordinate {
 	
 	public static final double EPSILON = 0.00001;
@@ -109,7 +111,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 				
 		//Pre Conditions
-		assertCoordinateIsNotNull(coordinate);
+		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
 				
 		//MethodCall
 		boolean isEqual = doIsEqual(coordinate);
@@ -133,13 +135,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 		
 		//Pre Conditions
-		assertCoordinateIsNotNull(coordinate);
+		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
 		
 		//MethodCall
 		double distance = doGetCartesianDistance(coordinate);
 		
 		//Post Conditions -none
-		assertValueNotNegative("Distanz", distance);
+		AssertionMethods.assertValueNotNegative("Distanz", distance);
 		
 		//Class Invariants
 		assertClassInvariants();	
@@ -158,13 +160,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 		
 		//Pre Conditions
-		assertCoordinateIsNotNull(coordinate);
+		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
 		
 		//MethodCall
 		double distance = doGetSphericDistance(coordinate);
 		
 		//Post Conditions
-		assertValueNotNegative("Distanz", distance);
+		AssertionMethods.assertValueNotNegative("Distanz", distance);
 		
 		//Class Invariants
 		assertClassInvariants();	
@@ -195,44 +197,5 @@ public abstract class AbstractCoordinate implements Coordinate {
 		}
 			
 		return false;
-	}
-	
-	/**
-	 * Assertion-method for checking an input coordinate if it is null.
-	 * Throws IllegalArgumentException in case of null.
-	 * @param coordinate
-	 */
-	protected void assertCoordinateIsNotNull(Coordinate coordinate) {
-		if(coordinate == null) {
-			throw new IllegalArgumentException("Coordinate can not be null!");
-		}
-	}
-	
-	/**
-	 * Checks if the double is not a number or infinite.
-	 * Returns true if it is not one of them.
-	 * 
-	 * @param val
-	 * @return
-	 */
-	protected boolean assertValidDoubleValue(String name, double val) {
-		
-		if(Double.isNaN(val) || Double.isInfinite(val)) {
-			throw new IllegalStateException(name + ": Double value can not be infinite or not a number!");
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Simple implementation if value >= 0.
-	 * @param value
-	 * @return
-	 */
-	protected void assertValueNotNegative(String name, double value) {
-		
-		if(value <= 0) {
-			throw new IllegalStateException(name + "must be positive or zero!");
-		}
 	}
 }

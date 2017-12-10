@@ -45,11 +45,6 @@ import java.util.logging.Logger;
  */
 public abstract class PhotoManager extends ObjectManager {
 
-	/**
-	 *
-	 */
-	//protected static PhotoManager instance;
-
 	private static final Logger log = Logger.getLogger(PhotoManager.class.getName());
 
 	/**
@@ -61,20 +56,6 @@ public abstract class PhotoManager extends ObjectManager {
 	 *
 	 */
 	protected PhotoTagCollector photoTagCollector = null;
-
-	/**
-	 *
-	 */
-	//public PhotoManager() {
-	//	photoTagCollector = PhotoFactory.getInstance().createPhotoTagCollector();
-	//}
-
-	/**
-	 *
-	 */
-	//public static final PhotoManager getInstance() {
-	//	return instance;
-	//}
 
 	/**
 	 *
@@ -322,5 +303,4 @@ public abstract class PhotoManager extends ObjectManager {
 			throw new IllegalStateException("Photo already exists!");
 		}
 	}
-
 }

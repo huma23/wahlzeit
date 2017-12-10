@@ -21,6 +21,8 @@ package org.wahlzeit.model.coordinate;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+import org.wahlzeit.utils.AssertionMethods;
+
 /**
  * A CartesianCoordinate represents one coordinate in a cartesian space
  */
@@ -40,6 +42,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		assertClassInvariants();
 	}
 	
 	/**
@@ -49,8 +52,6 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	 */
 	@Override
 	protected boolean doIsEqual(Coordinate coordinate) {
-		
-		assertCoordinateIsNotNull(coordinate);
 		
 		return Math.abs(this.x - coordinate.asCartesianCoordinate().x) <= EPSILON 
 				&& Math.abs(this.y - coordinate.asCartesianCoordinate().y) <= EPSILON 
@@ -141,9 +142,9 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	public void assertClassInvariants() {
 		
 		//There are only double values in this class so they need to be checked
-		assertValidDoubleValue("X", x);
-		assertValidDoubleValue("Y", y);
-		assertValidDoubleValue("Z", z);
+		AssertionMethods.assertValidDoubleValue("X", x);
+		AssertionMethods.assertValidDoubleValue("Y", y);
+		AssertionMethods.assertValidDoubleValue("Z", z);
 	}
 
 	/*

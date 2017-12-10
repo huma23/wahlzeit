@@ -36,10 +36,17 @@ public class SneakerPhoto extends Photo {
 		super();
 	}
 	
+	public SneakerPhoto(String brand, String color) {
+		this();
+		this.brand = brand;
+		this.color = color;
+	}
+	
 	public SneakerPhoto(PhotoId id) {
 		super(id);
 	}
-
+	
+	//Getter and setter
 	public String getColor() {
 		return color;
 	}

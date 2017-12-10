@@ -21,6 +21,8 @@ package org.wahlzeit.model.coordinate;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+import org.wahlzeit.utils.AssertionMethods;
+
 /**
  * A SphericCoordinate represents one coordinate in a spheric space
  */
@@ -39,9 +41,11 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @param radius
 	 */
 	public SphericCoordinate(double latitude, double longitude, double radius) {
+		
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.radius = radius;
+		assertClassInvariants();
 	}
 	
 	/**
@@ -51,9 +55,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @param longitude
 	 */
 	public SphericCoordinate(double latitude, double longitude) {
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.radius = EARTH_RADIUS;
+		this(latitude, longitude, EARTH_RADIUS);
 	}
 
 	/**
@@ -88,7 +90,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	@Override
 	protected boolean doIsEqual(Coordinate coordinate) {
 		
-		assertCoordinateIsNotNull(coordinate);
+		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
 		
 		return Math.abs(this.longitude - coordinate.asSphericCoordinate().longitude) <= EPSILON 
 				&& Math.abs(this.latitude - coordinate.asSphericCoordinate().latitude) <= EPSILON 
@@ -162,9 +164,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	@Override
 	public void assertClassInvariants() {
 		
-		assertValueNotNegative("Radius", radius);
-		assertValidDoubleValue("Latitude", latitude);
-		assertValidDoubleValue("Longitude", longitude);
+		AssertionMethods.assertValueNotNegative("Radius", radius);
+		AssertionMethods.assertValidDoubleValue("Latitude", latitude);
+		AssertionMethods.assertValidDoubleValue("Longitude", longitude);
 		assertValidLongitudeAndLatitude(longitude, latitude);
 	}
 	

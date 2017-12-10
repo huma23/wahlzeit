@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.wahlzeit.services.LogBuilder;
+import org.wahlzeit.utils.AssertionMethods;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Work;
@@ -44,24 +45,14 @@ public class SneakerPhotoManager extends PhotoManager {
 	
 	@Override
 	public Photo getPhotoFromId(PhotoId id) {
-		if (id == null) {
-			return null;
-		}
-
+		AssertionMethods.assertObjectIsNotNull("PhotoId", id);
 		Photo result = doGetPhotoFromId(id);
-
-		if (result == null) {
-			result = SneakerPhotoFactory.getInstance().loadPhoto(id);
-			if (result != null) {
-				doAddPhoto(result);
-			}
-		}
-
 		return result;
 	}
 
 	@Override
 	public Photo getPhoto(PhotoId id) {
+		AssertionMethods.assertObjectIsNotNull("PhotoId", id);
 		return instance.getPhotoFromId(id);
 	}	
 	
@@ -95,7 +86,6 @@ public class SneakerPhotoManager extends PhotoManager {
 			}
 		}
 
-		log.info(LogBuilder.createSystemMessage().addMessage("All photos loaded.").toString());
-		
+		log.info(LogBuilder.createSystemMessage().addMessage("All photos loaded.").toString());	
 	}
 }

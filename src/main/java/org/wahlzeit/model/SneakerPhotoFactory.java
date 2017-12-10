@@ -22,6 +22,7 @@ package org.wahlzeit.model;
 import java.util.logging.Logger;
 
 import org.wahlzeit.services.LogBuilder;
+import org.wahlzeit.utils.AssertionMethods;
 
 public class SneakerPhotoFactory extends PhotoFactory {
 	
@@ -63,6 +64,13 @@ public class SneakerPhotoFactory extends PhotoFactory {
 
 	@Override
 	public Photo createPhoto(PhotoId id) {
+		AssertionMethods.assertObjectIsNotNull("PhotoId", id);
 		return new SneakerPhoto(id);
+	}
+	
+	public Photo createPhoto(String brand, String color) {
+		AssertionMethods.assertObjectIsNotNull("Brand", brand);
+		AssertionMethods.assertObjectIsNotNull("Color", color);
+		return new SneakerPhoto(brand, color);
 	}
 }
