@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.wahlzeit.services.LogBuilder;
-import org.wahlzeit.utils.AssertionMethods;
+import org.wahlzeit.utils.Assertions;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Work;
@@ -45,14 +45,17 @@ public class SneakerPhotoManager extends PhotoManager {
 	
 	@Override
 	public Photo getPhotoFromId(PhotoId id) {
-		AssertionMethods.assertObjectIsNotNull("PhotoId", id);
+		//PhotoId == null is used to display the "No more Photos Page"
+		//If there is an exception a Server Error occures
+		//Assertions.assertObjectIsNotNull("PhotoId", id);
 		Photo result = doGetPhotoFromId(id);
 		return result;
 	}
 
 	@Override
 	public Photo getPhoto(PhotoId id) {
-		AssertionMethods.assertObjectIsNotNull("PhotoId", id);
+		////PhotoId == null is used to display the "No more Photos Page"
+		//Assertions.assertObjectIsNotNull("PhotoId", id);
 		return instance.getPhotoFromId(id);
 	}	
 	
