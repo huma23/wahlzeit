@@ -47,13 +47,13 @@ public class LocationTest {
 ;	
 	@Before
 	public void setup() {
-		c0 = new CartesianCoordinate(1.0, 0.0, 0.0);
+		c0 = CartesianCoordinate.createCartesianCoordinate(1.0, 0.0, 0.0);
 		l1 = new Location(c0);
-		c1 = new CartesianCoordinate(2.0, 0.1, 1.0);
+		c1 = CartesianCoordinate.createCartesianCoordinate(2.0, 0.1, 1.0);
 		l2 = new Location(c1);
-		c2 = new CartesianCoordinate(1.0, 0.0, 0.0);
+		c2 = CartesianCoordinate.createCartesianCoordinate(1.0, 0.0, 0.0);
 		l3 = new Location(c2);
-		c3 = new SphericCoordinate(49.59099, 11.00783);
+		c3 = SphericCoordinate.createSphericCoordinate(49.59099, 11.00783);
 		l4 = new Location(c3);
 	}
 	

@@ -31,7 +31,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	StringUtilTest.class,
 	VersionTest.class,
-	AssertionMethods.class
+	AssertionsTest.class
 })
 
 public class UtilsTestSuite {

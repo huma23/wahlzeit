@@ -22,7 +22,7 @@ package org.wahlzeit.utils;
  * This class combines all common assertion methods used in more than one class.
  * Specific assertion methods are in the concrete class. 
  */
-public class AssertionMethods {
+public class Assertions {
 	
 	/**
 	 * Simple implementation if value >= 0.

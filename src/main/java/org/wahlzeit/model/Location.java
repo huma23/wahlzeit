@@ -19,7 +19,7 @@
 package org.wahlzeit.model;
 
 import org.wahlzeit.model.coordinate.Coordinate;
-import org.wahlzeit.utils.AssertionMethods;
+import org.wahlzeit.utils.Assertions;
 
 /**
  * The class Location represents the location of a photo.
@@ -70,6 +70,6 @@ public class Location {
 	}
 	
 	public void assertClassInvariants() {
-		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
+		Assertions.assertObjectIsNotNull("Coordinate", coordinate);
 	}
 }

@@ -21,40 +21,40 @@ package org.wahlzeit.utils;
 import org.junit.Test;
 import org.wahlzeit.model.coordinate.CartesianCoordinate;
 
-public class AssertionMethodsTest {
+public class AssertionsTest {
 
 	@Test
 	public void testAssertValueNotNegativeNoException() {
-		AssertionMethods.assertValueNotNegative("test1", 0);
-		AssertionMethods.assertValueNotNegative("test2", 10.5);
+		Assertions.assertValueNotNegative("test1", 0);
+		Assertions.assertValueNotNegative("test2", 10.5);
 	}
 	
 	@Test(expected = IllegalStateException.class)
 	public void testAssertValueNotNegativeException() {
-		AssertionMethods.assertValueNotNegative("test1", -1.0);
-		AssertionMethods.assertValueNotNegative("test2", -10.0);
+		Assertions.assertValueNotNegative("test1", -1.0);
+		Assertions.assertValueNotNegative("test2", -10.0);
 	}
 	
 	@Test
 	public void testAssertValidDoubleValueNoException() {
-		AssertionMethods.assertValidDoubleValue("test1", 0.0);
-		AssertionMethods.assertValidDoubleValue("test2", 5.2);
+		Assertions.assertValidDoubleValue("test1", 0.0);
+		Assertions.assertValidDoubleValue("test2", 5.2);
 	}
 	
 	@Test(expected = IllegalStateException.class)
 	public void testAssertValidDoubleValueException() {
-		AssertionMethods.assertValidDoubleValue("test1", Double.NaN);
-		AssertionMethods.assertValidDoubleValue("test2", Double.POSITIVE_INFINITY);
+		Assertions.assertValidDoubleValue("test1", Double.NaN);
+		Assertions.assertValidDoubleValue("test2", Double.POSITIVE_INFINITY);
 	}
 	
 	@Test
 	public void testAssertObjectIsNotNullNoException() {
-		AssertionMethods.assertObjectIsNotNull("test1", new Object());
-		AssertionMethods.assertObjectIsNotNull("test2", new CartesianCoordinate(3, 1, 2));
+		Assertions.assertObjectIsNotNull("test1", new Object());
+		Assertions.assertObjectIsNotNull("test2", CartesianCoordinate.createCartesianCoordinate(3, 1, 2));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testAssertObjectIsNotNullException() {
-		AssertionMethods.assertObjectIsNotNull("test1", null);
+		Assertions.assertObjectIsNotNull("test1", null);
 	}
 }
