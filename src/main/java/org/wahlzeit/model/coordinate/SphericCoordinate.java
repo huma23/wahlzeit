@@ -20,8 +20,10 @@ package org.wahlzeit.model.coordinate;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.wahlzeit.utils.AssertionMethods;
+import org.wahlzeit.utils.Assertions;
 
 /**
  * A SphericCoordinate represents one coordinate in a spheric space
@@ -30,17 +32,43 @@ public class SphericCoordinate extends AbstractCoordinate {
 	
 	public static final double EARTH_RADIUS = 6378.0;
 	
-	private double latitude;
-	private double longitude;
-	private double radius;
+	private final double latitude;
+	private final double longitude;
+	private final double radius;
+	private final static Map<Integer, SphericCoordinate> SHARED_COORDINATES = new HashMap<>();
 
+	/**
+	 * Checks if the current Spheric value already exists and returns it.
+	 * Otherwise it creates a new value and returns it.
+	 * @param latitude
+	 * @param longitude
+	 * @param radius
+	 * @return
+	 */
+	public static SphericCoordinate createSphericCoordinate(double latitude, double longitude, double radius) {
+		SphericCoordinate tempSphericCoordinate = new SphericCoordinate(latitude, longitude, radius);
+		return createCoordinate(SHARED_COORDINATES, tempSphericCoordinate);
+	}
+	
+	/**
+	 * Checks if the current Cartesian value already exists and returns it.
+	 * Otherwise it creates a new value and returns it. The parameter radius of the spheric coordinate
+	 * is set to the default (Earth Radius).
+	 * @param latitude
+	 * @param longitude
+	 * @return
+	 */
+	public static SphericCoordinate createSphericCoordinate(double latitude, double longitude) {
+		return createSphericCoordinate(latitude, longitude, EARTH_RADIUS);
+	}
+	
 	/**
 	 * Constructor for creating an instance of a SphericCoordinate
 	 * @param latitude
 	 * @param longitude
 	 * @param radius
 	 */
-	public SphericCoordinate(double latitude, double longitude, double radius) {
+	private SphericCoordinate(double latitude, double longitude, double radius) {
 		
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -48,16 +76,6 @@ public class SphericCoordinate extends AbstractCoordinate {
 		assertClassInvariants();
 	}
 	
-	/**
-	 * Constructor for creating an instance of a SphericCoordinate with EARTH_RADIUS 
-	 * as default for parameter radius
-	 * @param latitude
-	 * @param longitude
-	 */
-	public SphericCoordinate(double latitude, double longitude) {
-		this(latitude, longitude, EARTH_RADIUS);
-	}
-
 	/**
 	 * Converts this SphericCoordinate to a CartesianCoordinate.
 	 */
@@ -71,7 +89,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 		double y = this.radius * Math.sin(radiantLambda) * Math.sin(radiantPhi);
 		double z = this.radius * Math.cos(radiantLambda);
 		
-		return new CartesianCoordinate(x, y, z);
+		return CartesianCoordinate.createCartesianCoordinate(x, y, z);
 	}
 
 	/**
@@ -90,11 +108,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	@Override
 	protected boolean doIsEqual(Coordinate coordinate) {
 		
-		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
-		
-		return Math.abs(this.longitude - coordinate.asSphericCoordinate().longitude) <= EPSILON 
-				&& Math.abs(this.latitude - coordinate.asSphericCoordinate().latitude) <= EPSILON 
-				&& Math.abs(this.radius - coordinate.asSphericCoordinate().radius) <= EPSILON;
+		return this.hashCode() == coordinate.hashCode();
 	}
 	
 	@Override
@@ -164,9 +178,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 	@Override
 	public void assertClassInvariants() {
 		
-		AssertionMethods.assertValueNotNegative("Radius", radius);
-		AssertionMethods.assertValidDoubleValue("Latitude", latitude);
-		AssertionMethods.assertValidDoubleValue("Longitude", longitude);
+		Assertions.assertValueNotNegative("Radius", radius);
+		Assertions.assertValidDoubleValue("Latitude", latitude);
+		Assertions.assertValidDoubleValue("Longitude", longitude);
 		assertValidLongitudeAndLatitude(longitude, latitude);
 	}
 	

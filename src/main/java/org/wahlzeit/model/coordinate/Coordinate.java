@@ -31,4 +31,7 @@ public interface Coordinate {
 	public double getDistance(Coordinate coordinate);
 	
 	public boolean isEqual(Coordinate coordinate);
+	
+	@Override
+	public int hashCode();
 }

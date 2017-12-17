@@ -18,12 +18,14 @@
  */
 package org.wahlzeit.model.coordinate;
 
-import org.wahlzeit.utils.AssertionMethods;
+import java.util.Map;
+
+import org.wahlzeit.utils.Assertions;
 
 public abstract class AbstractCoordinate implements Coordinate {
 	
 	public static final double EPSILON = 0.00001;
-	
+
 	/**
 	 * Class invariant specific for each class.
 	 * Needs to be implemented
@@ -65,6 +67,25 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 * @return
 	 */
 	protected abstract double doGetSphericDistance(Coordinate coordinate);
+	
+	/**
+	 * Generic Method for checking if this Coordinate already exists. If not then
+	 * the new one will be added to the map.
+	 * @param sharedMap
+	 * @param coordinate
+	 * @return
+	 */
+	protected static <T extends Coordinate> T createCoordinate(Map<Integer, T> sharedMap, T coordinate){
+		
+		T sharedCoordinate = sharedMap.get(coordinate.hashCode());
+		
+		if(sharedCoordinate == null) {
+			sharedMap.put(coordinate.hashCode(), coordinate);
+			return coordinate;
+		} else {
+			return sharedCoordinate;
+		}
+	}
 	
 	@Override
 	public CartesianCoordinate asCartesianCoordinate() {
@@ -111,7 +132,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 				
 		//Pre Conditions
-		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
+		Assertions.assertObjectIsNotNull("Coordinate", coordinate);
 				
 		//MethodCall
 		boolean isEqual = doIsEqual(coordinate);
@@ -135,13 +156,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 		
 		//Pre Conditions
-		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
+		Assertions.assertObjectIsNotNull("Coordinate", coordinate);
 		
 		//MethodCall
 		double distance = doGetCartesianDistance(coordinate);
 		
 		//Post Conditions -none
-		AssertionMethods.assertValueNotNegative("Distanz", distance);
+		Assertions.assertValueNotNegative("Distanz", distance);
 		
 		//Class Invariants
 		assertClassInvariants();	
@@ -160,13 +181,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 		assertClassInvariants();
 		
 		//Pre Conditions
-		AssertionMethods.assertObjectIsNotNull("Coordinate", coordinate);
+		Assertions.assertObjectIsNotNull("Coordinate", coordinate);
 		
 		//MethodCall
 		double distance = doGetSphericDistance(coordinate);
 		
 		//Post Conditions
-		AssertionMethods.assertValueNotNegative("Distanz", distance);
+		Assertions.assertValueNotNegative("Distanz", distance);
 		
 		//Class Invariants
 		assertClassInvariants();	

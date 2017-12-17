@@ -20,17 +20,33 @@ package org.wahlzeit.model.coordinate;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.wahlzeit.utils.AssertionMethods;
+import org.wahlzeit.utils.Assertions;
 
 /**
  * A CartesianCoordinate represents one coordinate in a cartesian space
  */
 public class CartesianCoordinate extends AbstractCoordinate{
 
-	private double x;
-	private double y;
-	private double z;
+	private final double x;
+	private final double y;
+	private final double z;
+	private final static Map<Integer, CartesianCoordinate> SHARED_COORDINATES = new HashMap<>();
+
+	/**
+	 * Checks if the current Cartesian value already exists and returns it.
+	 * Otherwise it creates a new value and returns it.
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public static CartesianCoordinate createCartesianCoordinate(double x, double y, double z) {
+		CartesianCoordinate tempCartesianCoordinate = new CartesianCoordinate(x, y, z);
+		return createCoordinate(SHARED_COORDINATES, tempCartesianCoordinate);
+	}
 	
 	/**
 	 * Constructor for creating an instance of a CartesianCoordinate
@@ -38,7 +54,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	 * @param y
 	 * @param z
 	 */
-	public CartesianCoordinate(double x, double y, double z) {
+	private CartesianCoordinate(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -53,9 +69,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	@Override
 	protected boolean doIsEqual(Coordinate coordinate) {
 		
-		return Math.abs(this.x - coordinate.asCartesianCoordinate().x) <= EPSILON 
-				&& Math.abs(this.y - coordinate.asCartesianCoordinate().y) <= EPSILON 
-				&& Math.abs(this.z - coordinate.asCartesianCoordinate().z) <= EPSILON;
+		return this.hashCode() == coordinate.hashCode();
 	}
 	
 	/**
@@ -116,7 +130,7 @@ public class CartesianCoordinate extends AbstractCoordinate{
 		double latitude = Math.toDegrees(Math.atan(this.y / this.x));
 		double longitude = Math.toDegrees(Math.atan(Math.sqrt((Math.pow(this.x, 2)) + Math.pow(this.y, 2)) / this.z));
 		
-		return new SphericCoordinate(latitude, longitude, radius);
+		return SphericCoordinate.createSphericCoordinate(latitude, longitude, radius);
 	}
 	
 	@Override
@@ -142,9 +156,9 @@ public class CartesianCoordinate extends AbstractCoordinate{
 	public void assertClassInvariants() {
 		
 		//There are only double values in this class so they need to be checked
-		AssertionMethods.assertValidDoubleValue("X", x);
-		AssertionMethods.assertValidDoubleValue("Y", y);
-		AssertionMethods.assertValidDoubleValue("Z", z);
+		Assertions.assertValidDoubleValue("X", x);
+		Assertions.assertValidDoubleValue("Y", y);
+		Assertions.assertValidDoubleValue("Z", z);
 	}
 
 	/*
