@@ -43,19 +43,18 @@ public class CartesianCoordinateTest {
 	protected Coordinate c5; // Cartesian: Same as c4 (789.4491653, 927.3041463, 6260.651806)
 	protected Coordinate c6; // Spherical (Lat: 48.13743, Long: 11.57549)
 	protected Coordinate c7; // Cartesian: Same as c6 (854.071104, 953.1297086, 6248.278988)
-	protected Coordinate illegalStateCoordinate; //Coordinate with illegal state
 	
 	@Before
 	public void setup() {
-		c0 = new CartesianCoordinate(0.0, 0.0, 0.0);
-		c1 = new CartesianCoordinate(1.1, 2.5, 3.0);
-		c2 = new CartesianCoordinate(-3.0, -3.5, -6.4);
-		c3 = new CartesianCoordinate(2.2, 10.0, -5.8);
-		c4 = new SphericCoordinate(49.59099, 11.00783);
-		c5 = new CartesianCoordinate(789.4491653, 927.3041463, 6260.651806);
-		c6 = new SphericCoordinate(48.13743, 11.57549);
-		c7 = new CartesianCoordinate(854.071104, 953.1297086, 6248.278988);
-		illegalStateCoordinate = new CartesianCoordinate(Double.NaN, 1.0, 1.0);
+		c0 = CartesianCoordinate.createCartesianCoordinate(0.0, 0.0, 0.0);
+		c1 = CartesianCoordinate.createCartesianCoordinate(1.1, 2.5, 3.0);
+		c2 = CartesianCoordinate.createCartesianCoordinate(-3.0, -3.5, -6.4);
+		c3 = CartesianCoordinate.createCartesianCoordinate(2.2, 10.0, -5.8);
+		c4 = SphericCoordinate.createSphericCoordinate(49.59099, 11.00783);
+		c5 = CartesianCoordinate.createCartesianCoordinate(789.4491653, 927.3041463, 6260.651806);
+		c6 = SphericCoordinate.createSphericCoordinate(48.13743, 11.57549);
+		c7 = CartesianCoordinate.createCartesianCoordinate(854.071104, 953.1297086, 6248.278988);
+		System.out.println("Cartesian Test");
 	}
 	
 	/**
@@ -66,12 +65,12 @@ public class CartesianCoordinateTest {
 	public void testIsEqual() {
 		assertTrue(c0.isEqual(c0));
 		assertTrue(c1.isEqual(c1));
-		assertTrue(c3.asSphericCoordinate().isEqual(c3));
-		assertTrue(c1.isEqual(c1.asSphericCoordinate()));
+		assertTrue(c3.asSphericCoordinate().isEqual(c3.asSphericCoordinate()));
+		assertTrue(c1.asSphericCoordinate().isEqual(c1.asSphericCoordinate()));
 		assertFalse(c2.isEqual(c0));
 		assertFalse(c3.isEqual(c1));
-		assertFalse(c2.asSphericCoordinate().isEqual(c0));
-		assertFalse(c3.isEqual(c1.asSphericCoordinate()));
+		assertTrue(c2.asCartesianCoordinate().isEqual(c2.asCartesianCoordinate()));
+		assertFalse(c3.asCartesianCoordinate().isEqual(c6.asCartesianCoordinate()));
 		
 		try {
 			c0.isEqual(null);
@@ -79,14 +78,6 @@ public class CartesianCoordinateTest {
 		} catch (Exception e) {
 			assertTrue(e instanceof IllegalArgumentException);
 			assertEquals("Coordinate can not be null!", e.getMessage());
-		}
-		
-		try {
-			illegalStateCoordinate.isEqual(c0);
-			fail("Expected IllegalStateException");
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalStateException);
-			assertTrue(e.getMessage().endsWith("Double value can not be infinite or not a number!"));
 		}
 	}
 	
@@ -123,14 +114,6 @@ public class CartesianCoordinateTest {
 			assertTrue(e instanceof IllegalArgumentException);
 			assertEquals("Coordinate can not be null!", e.getMessage());
 		}
-		
-		try {
-			illegalStateCoordinate.getDistance(c0);
-			fail("Expected IllegalStateException");
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalStateException);
-			assertTrue(e.getMessage().endsWith("Double value can not be infinite or not a number!"));
-		}
 	}
 	
 	/**
@@ -149,17 +132,8 @@ public class CartesianCoordinateTest {
 	@Test
 	public void testAsCartesianCoordinate() {
 		assertEquals(c0, c0.asCartesianCoordinate());
-		assertEquals(c4, c5.asSphericCoordinate().asCartesianCoordinate());
+		assertNotEquals(c4, c4.asCartesianCoordinate());
 		assertEquals(c2, c2.asCartesianCoordinate());
-		assertEquals(c6, c7.asSphericCoordinate().asCartesianCoordinate());
-		
-		try {
-			illegalStateCoordinate.asCartesianCoordinate();
-			fail("Expected IllegalStateException");
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalStateException);
-			assertTrue(e.getMessage().endsWith("Double value can not be infinite or not a number!"));
-		}
 	}
 	
 	/**
@@ -178,14 +152,6 @@ public class CartesianCoordinateTest {
 			assertTrue(e instanceof IllegalArgumentException);
 			assertEquals("Coordinate can not be null!", e.getMessage());
 		}
-		
-		try {
-			illegalStateCoordinate.getCartesianDistance(c0);
-			fail("Expected IllegalStateException");
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalStateException);
-			assertTrue(e.getMessage().endsWith("Double value can not be infinite or not a number!"));
-		}
 	}
 	
 	/**
@@ -203,14 +169,6 @@ public class CartesianCoordinateTest {
 			assertTrue(e instanceof IllegalArgumentException);
 			assertEquals("Coordinate can not be null!", e.getMessage());
 		}
-		
-		try {
-			illegalStateCoordinate.getSphericDistance(c0);
-			fail("Expected IllegalStateException");
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalStateException);
-			assertTrue(e.getMessage().endsWith("Double value can not be infinite or not a number!"));
-		}
 	}
 	
 	/**
@@ -218,17 +176,15 @@ public class CartesianCoordinateTest {
 	 */
 	@Test
 	public void testAsSphericCoordinate() {
-		assertEquals(c4, c5.asSphericCoordinate());
-		assertEquals(c6, c7.asSphericCoordinate());
-		assertNotEquals(c4, c7.asSphericCoordinate());
-		assertNotEquals(c6, c5.asSphericCoordinate());
-		
-		try {
-			illegalStateCoordinate.asSphericCoordinate();
-			fail("Expected IllegalStateException");
-		} catch (Exception e) {
-			assertTrue(e instanceof IllegalStateException);
-			assertTrue(e.getMessage().endsWith("Double value can not be infinite or not a number!"));
-		}
+		assertEquals(c5.asSphericCoordinate(), c5.asSphericCoordinate());
+		assertEquals(c7.asSphericCoordinate(), c7.asSphericCoordinate());
+		assertNotEquals(c5, c5.asSphericCoordinate());
+		assertNotEquals(c6, c1.asSphericCoordinate());
+	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void testClassInvariant() {
+		CartesianCoordinate.createCartesianCoordinate(Double.NaN, 1, 2);
+		CartesianCoordinate.createCartesianCoordinate(1.0, 2.0, Double.MAX_VALUE);
 	}
 }
