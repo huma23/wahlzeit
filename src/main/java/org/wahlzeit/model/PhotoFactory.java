@@ -20,9 +20,18 @@
 
 package org.wahlzeit.model;
 
+import org.wahlzeit.annotations.PatternInstance;
+
 /**
  * An Abstract Factory for creating photos and related objects.
  */
+@PatternInstance(
+		patternName = "AbstractFactory",
+		participants = {
+			"PhotoFactory", 
+			"SneakerPhotoFactory"
+		}
+	)
 public abstract class PhotoFactory {
 
 	/**

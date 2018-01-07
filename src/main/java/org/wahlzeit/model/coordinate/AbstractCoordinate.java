@@ -20,8 +20,17 @@ package org.wahlzeit.model.coordinate;
 
 import java.util.Map;
 
+import org.wahlzeit.annotations.PatternInstance;
 import org.wahlzeit.utils.Assertions;
 
+@PatternInstance(
+	patternName = "Value Object",
+	participants = {
+		"AbstractCoordinate",
+		"CartesianCoordinate",
+		"SphericCoordinate"
+	}
+)
 public abstract class AbstractCoordinate implements Coordinate {
 	
 	public static final double EPSILON = 0.00001;
