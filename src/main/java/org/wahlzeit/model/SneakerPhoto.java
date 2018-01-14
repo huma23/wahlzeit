@@ -19,6 +19,10 @@
  */
 package org.wahlzeit.model;
 
+
+import org.wahlzeit.model.sneaker.Sneaker;
+
+import com.googlecode.objectify.annotation.Serialize;
 import com.googlecode.objectify.annotation.Subclass;
 
 /**
@@ -28,38 +32,29 @@ import com.googlecode.objectify.annotation.Subclass;
  */
 @Subclass
 public class SneakerPhoto extends Photo {
-	
-	private String brand;
-	private String color;
 
+	@Serialize
+	private Sneaker sneaker = null;
+	
 	public SneakerPhoto() {
 		super();
-	}
-	
-	public SneakerPhoto(String brand, String color) {
-		this();
-		this.brand = brand;
-		this.color = color;
 	}
 	
 	public SneakerPhoto(PhotoId id) {
 		super(id);
 	}
 	
-	//Getter and setter
-	public String getColor() {
-		return color;
+	public SneakerPhoto(Sneaker sneaker) {
+		super();
+		this.sneaker = sneaker;
 	}
-
-	public void setColor(String color) {
-		this.color = color;
+	
+	public SneakerPhoto(PhotoId id, Sneaker sneaker) {
+		super(id);
+		this.sneaker = sneaker;
 	}
-
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
+	
+	public Sneaker getSneaker() {
+		return sneaker;
 	}
 }

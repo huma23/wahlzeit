@@ -17,34 +17,22 @@
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package org.wahlzeit.model;
+package org.wahlzeit.model.sneaker;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import org.wahlzeit.model.coordinate.CoordinateTestSuite;
-import org.wahlzeit.model.sneaker.SneakerTestSuite;
 
 /**
- * A test suite for all test in the package org.wahlzeit.model
+ * A test suite for all test in the package org.wahlzeit.model.sneaker
  * 
  * author: huma23
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	AccessRightsTest.class,
-	FlagReasonTest.class,
-	GenderTest.class,
-	GuestTest.class,
-	LocationTest.class,
-	PhotoFilterTest.class,
-	TagsTest.class,
-	UserStatusTest.class,
-	ValueTest.class,
-	SneakerPhotoFactoryTest.class,
-	SneakerPhotoManagerTest.class,
-	CoordinateTestSuite.class,
-	SneakerTestSuite.class
+	SneakerManagerTest.class,
+	SneakerTypeTest.class
 })
 
-public class ModelTestSuite {
+public class SneakerTestSuite {
+
 }

@@ -34,6 +34,7 @@ import org.wahlzeit.model.User;
 import org.wahlzeit.model.UserManager;
 import org.wahlzeit.model.persistence.DatastoreAdapter;
 import org.wahlzeit.model.persistence.ImageStorage;
+import org.wahlzeit.model.sneaker.SneakerManager;
 import org.wahlzeit.services.LogBuilder;
 
 /**
@@ -49,11 +50,11 @@ public abstract class ModelMain extends AbstractMain {
 	protected void startUp(String rootDir) throws Exception {
 		super.startUp(rootDir);
 		log.info("AbstractMain.startUp completed");
-
+		
 		log.config(LogBuilder.createSystemMessage().addAction("load image storage").toString());
 		//GcsAdapter.Builder gcsAdapterBuilder = new GcsAdapter.Builder();
 		ImageStorage.setInstance(new DatastoreAdapter());
-
+		
 		log.config(LogBuilder.createSystemMessage().addAction("load globals").toString());
 		GlobalsManager.getInstance().loadGlobals();
 
@@ -64,7 +65,7 @@ public abstract class ModelMain extends AbstractMain {
 		SneakerPhotoFactory.initialize();
 
 		log.config(LogBuilder.createSystemMessage().addAction("load Photos").toString());
-		SneakerPhotoManager.getInstance().init();
+		SneakerPhotoManager.getInstance().init();	
 	}
 
 

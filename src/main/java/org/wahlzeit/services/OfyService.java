@@ -14,6 +14,8 @@ import org.wahlzeit.model.SneakerPhoto;
 import org.wahlzeit.model.Tag;
 import org.wahlzeit.model.User;
 import org.wahlzeit.model.persistence.DatastoreAdapter.ImageWrapper;
+import org.wahlzeit.model.sneaker.Sneaker;
+import org.wahlzeit.model.sneaker.SneakerType;
 
 /**
  * A badly named class, to be renamed to ObjectifyService first, something better later.
