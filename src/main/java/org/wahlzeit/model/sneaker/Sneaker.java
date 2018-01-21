@@ -24,6 +24,17 @@ import org.wahlzeit.utils.Assertions;
 /**
  * Representation of a Sneaker with a SneakerType
  * 
+ * Method calls that lead to a new object:
+ * 		1) {@link SneakerManager#createSneaker(String)}
+ * 		2) {@link SneakerType#createInstance()}
+ * 
+ * Object creation:
+ * 		1) Delegation: 		Separate-object
+ * 		2) Selection:		On-the-spot
+ * 		3) Configuration:	N/A
+ * 		4) Instantiation:	In-Code
+ * 		5) Initialization:	Default
+ * 		6) Building:		Default
  */
 public class Sneaker {
 

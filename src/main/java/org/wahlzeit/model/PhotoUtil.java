@@ -20,13 +20,15 @@
 
 package org.wahlzeit.model;
 
+import java.util.logging.Logger;
+
+import org.wahlzeit.model.sneaker.Sneaker;
+import org.wahlzeit.services.LogBuilder;
+
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
-import org.wahlzeit.services.LogBuilder;
-
-import java.util.logging.Logger;
 
 /**
  * PhotoUtil provides a set of utility functions to create defined images.
@@ -41,6 +43,33 @@ public class PhotoUtil {
 	 */
 	public static Photo createPhoto(String filename, PhotoId id, Image uploadedImage) throws Exception {
 		Photo result = SneakerPhotoFactory.getInstance().createPhoto(id);
+		return createPhoto(result, filename, uploadedImage);
+	}
+	
+	/**
+	 * Creates new SneakerPhoto with given sneaker
+	 * 
+	 * @param filename
+	 * @param id
+	 * @param uploadedImage
+	 * @return
+	 * @throws Exception
+	 */
+	public static Photo createPhoto(String filename, PhotoId id, Image uploadedImage, Sneaker sneaker) throws Exception {
+		Photo result = SneakerPhotoFactory.getInstance().createPhoto(id, sneaker);
+		return createPhoto(result, filename, uploadedImage);
+	}
+	
+	/**
+	 * 
+	 * @param result
+	 * @param filename
+	 * @param uploadedImage
+	 * @return
+	 * @throws Exception
+	 */
+	protected static Photo createPhoto(Photo result, String filename, Image uploadedImage) throws Exception {
+		
 		result.setEnding(filename.substring(filename.lastIndexOf(".") + 1));
 
 		createImageFiles(uploadedImage, result);

@@ -28,6 +28,19 @@ import com.googlecode.objectify.annotation.Subclass;
 /**
  * Class for representing a photo of sneaker wahlzeit
  * @author huma23
+ * 
+ * Method calls that lead to a new object:
+ * 		1) {@link SneakerPhotoManager#createPhoto(String, com.google.appengine.api.images.Image, Sneaker)}
+ * 		2) {@link PhotoUtil#createPhoto(String, PhotoId, com.google.appengine.api.images.Image, Sneaker)}
+ * 		3) {@link SneakerPhotoFactory#createPhoto(PhotoId, Sneaker)}
+ * 
+ * Object creation:
+ * 		1) Delegation: 		Separate-object
+ * 		2) Selection:		By-Subclassing
+ * 		3) Configuration:	N/A
+ * 		4) Instantiation:	In-Code
+ * 		5) Initialization:	Default
+ * 		6) Building:		Default
  *
  */
 @Subclass

@@ -28,7 +28,7 @@ import org.wahlzeit.utils.Assertions;
 public class SneakerPhotoFactory extends PhotoFactory {
 	
 	private static final Logger log = Logger.getLogger(SneakerPhotoFactory.class.getName());
-	protected static PhotoFactory instance = null;
+	protected static SneakerPhotoFactory instance = null;
 	
 	protected SneakerPhotoFactory() {
 		// do nothing
@@ -38,7 +38,7 @@ public class SneakerPhotoFactory extends PhotoFactory {
 		getInstance(); // drops result due to getInstance() side-effects
 	}
 	
-	public static synchronized PhotoFactory getInstance() {
+	public static synchronized SneakerPhotoFactory getInstance() {
 		if (instance == null) {
 			log.config(LogBuilder.createSystemMessage().addAction("setting generic SneakerPhotoFactory").toString());
 			setInstance(new SneakerPhotoFactory());
@@ -50,7 +50,7 @@ public class SneakerPhotoFactory extends PhotoFactory {
 	/**
 	 * Method to set the singleton instance of PhotoFactory.
 	 */
-	protected static synchronized void setInstance(PhotoFactory photoFactory) {
+	protected static synchronized void setInstance(SneakerPhotoFactory photoFactory) {
 		if (instance != null) {
 			throw new IllegalStateException("attempt to initalize PhotoFactory twice");
 		}
@@ -67,6 +67,11 @@ public class SneakerPhotoFactory extends PhotoFactory {
 	public Photo createPhoto(PhotoId id) {
 		Assertions.assertObjectIsNotNull("PhotoId", id);
 		return new SneakerPhoto(id);
+	}
+	
+	public Photo createPhoto(PhotoId id, Sneaker sneaker) {
+		Assertions.assertObjectIsNotNull("Sneaker", sneaker);
+		return new SneakerPhoto(id, sneaker);
 	}
 	
 	public Photo createPhoto(Sneaker sneaker) {

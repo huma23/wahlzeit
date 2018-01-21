@@ -23,9 +23,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import org.wahlzeit.model.sneaker.Sneaker;
 import org.wahlzeit.services.LogBuilder;
-import org.wahlzeit.utils.Assertions;
 
+import com.google.appengine.api.images.Image;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Work;
 
@@ -41,6 +42,14 @@ public class SneakerPhotoManager extends PhotoManager {
 	
 	public SneakerPhotoManager() {
 		photoTagCollector = SneakerPhotoFactory.getInstance().createPhotoTagCollector();
+	}
+	
+	
+	public Photo createPhoto(String filename, Image uploadedImage, Sneaker sneaker) throws Exception {
+		PhotoId id = PhotoId.getNextId();
+		Photo result = PhotoUtil.createPhoto(filename, id, uploadedImage, sneaker);
+		addPhoto(result);
+		return result;
 	}
 	
 	@Override
