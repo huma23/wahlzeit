@@ -1,0 +1,109 @@
+/**
+* This file describes the following collaborations in wahlzeit:
+*
+*	- SneakerPhoto with Sneaker
+*	- Sneaker with SneakerType
+*   - SneakerManager with Sneaker
+*
+* The syntax leans on the syntax described in [R00] of the ADAP-Course programming papers
+*/
+
+/**
+*	This "class" would describes the ClientService collaboration,
+*	which is used by SneakerPhoto with Sneaker. It provides the main domain
+*	functionality for this wahlzeit instance.
+*/
+public collaboration ClientService {
+	
+	public role Client {
+	
+		//Returns the service object
+		public ClientService.Service getService();
+	}
+	
+	public role Service {
+		
+		//Returns the name of the Service
+		public String getName();
+		
+		//Example for collection information from the domain service
+		public Property getProptery(String property)
+	}
+}
+
+/**
+*	This "class" would describes the TypeObject collaboration,
+*	which is used by Sneaker with SneakerType. The type contains information, which is
+*	common to all instances of a type. The base object does always have a specific type.
+*/
+public collaboration TypeObject {
+	
+	public role Type {
+		
+		//Returns the parent type, if it exists
+		public TypeObject.Type getSuperType();
+		
+		//Returns a set of subtypes
+		public Set<TypeObject.Type> getSubTypes();
+	}
+	
+	public role BaseObject {
+	
+		//Returns the type of the base object
+		public TypeObject.Type getType()
+	}
+	
+	public role Client {
+		...
+	}
+} 
+
+/**
+*	This "class" would describes the ManagerElement collaboration,
+*	which is used by Sneaker with SneakerManager. The main focus of this collaboration
+*	is to centralize the object (element) management and creation in a single place (manager).
+*/
+public collaboration ManagerElement {
+
+	public role Manager {
+		
+		//creates a new element
+		public ManagerElement createElement();
+	}
+	
+	public role Element {
+	
+		...
+	}
+	
+	public role Client {
+		...
+	}
+}
+
+
+/**
+*
+*	The concrete usage in the single class would look like this. The class has the binding to the
+*	collaboration part through the keyword "bind" and the exact collaboaration part
+*
+*/
+public class Sneaker binds ClientService.Service, TypeObject.Type, ManagerElement.Element {
+
+	...
+}
+
+public class SneakerPhoto extends Photo binds ClientService.Client {
+
+	...
+}
+
+public class SneakerType binds TypeObject.Type {
+
+	...
+}
+
+public class SneakerManager binds ManagerElement.Manager {
+
+	...
+}
